@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 MIN_LENGTH = 8
 
-class UserSerializer(serializers.Serializer):
+class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True,
         min_length = MIN_LENGTH,
@@ -22,7 +22,7 @@ class UserSerializer(serializers.Serializer):
 
     class Meta:
         model = User
-        fields = "__all__"
+        fields = ['username', 'first_name', 'last_name', 'email', 'password', 'password2']
 
     
     def validate(self, data):
@@ -35,8 +35,7 @@ class UserSerializer(serializers.Serializer):
             username = validated_data['username'],
             email = validated_data['email'],
             first_name = validated_data['first_name'],
-            last_name = validated_data['last_name'],
-            active = validated_data['active']
+            last_name = validated_data['last_name']
         )
         user.set_password(validated_data['password'])
         user.save()
